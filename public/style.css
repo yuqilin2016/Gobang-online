@@ -1,0 +1,111 @@
+canvas {
+  display: block;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  box-shadow: -2px -2px 2px #EFEFEF, 5px 5px 5px #B9B9B9;
+  cursor: grabbing;
+}
+h1 {
+	position: absolute;
+  left: 0;
+  right: 0;
+  top:0;
+  bottom: 70%;
+  margin: auto;
+  width: 120px;
+  height: 50px;
+  text-align: center;
+}
+form#action {
+  display: block;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top:70%;
+  bottom: 0;
+  margin: auto;
+  width: 380px;
+  height: 50px;
+  text-align: center;
+}
+button {
+	background-color: #0066FF;
+	color: #ffffff;
+	line-height: 30px;
+}
+div#current {
+	/*float: left;*/
+  width: 300px;
+  position: absolute;
+  left: 10px;
+  top: 20px;
+	/*margin-top: 5%;*/
+	/*margin-right: 20%;*/
+}
+form#info {
+  /*position: absolute;*/
+  width: 250px;
+}
+button#enter {
+  float: right;
+  margin-top: -40px;
+}
+.userInfo {
+  width: 237px;
+  height: 121px;
+} 
+.userItem {
+  width: 100px;
+  height: 100px;
+  display: inline-block;
+  border-radius: 50%;
+  text-align: center;
+  margin-left: 6px;
+  margin-top: 10px;
+  /*vertical-align: middle;*/
+  line-height: 100px;
+}
+.waitingUser {
+  width: 221px;
+  height: 100px;
+  line-height: 100px;
+}
+@media screen and (max-width: 480px) {
+  div#current {
+    font-size: 120%;
+  }
+  button#enter {
+   font-size: 85%;
+  } 
+  h1 {
+    float: right;
+    /*position: absolute;*/
+    margin-right: 10px;
+    width: 100px;
+    margin-top: 20px;
+    /*text-align: left;*/
+    /*clear: both;*/
+  }
+}
+@media screen and (max-width: 430px) {
+  body {
+    transform: scale(0.9);
+  }
+}
+@media screen and (max-width: 470px) {
+  form#info {
+    width: 270px;
+  }
+  div#current {
+    width: 320px;
+  }
+}
+@media screen and (max-width: 380px) {
+  body {
+    transform: scale(0.8);
+  }
+}
