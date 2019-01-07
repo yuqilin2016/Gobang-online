@@ -64,7 +64,7 @@ div.userInfo {
   margin-top: 10px;
 }
 div.userItem {
-  width: 60px;
+  min-width: 60px;
   height: 60px;
   display: inline-block;
   border-radius: 50%;
@@ -84,14 +84,14 @@ div.userItem {
 @media screen and (max-width: 430px) {
   canvas {
     transform: scale(0.91);
-    transform-origin: 0 30%;
+    transform-origin: 0 60%;
   }
 
   div#current {
     margin-left: -5px;
   }
   div.userItem {
-    width: 30px;
+    min-width: 30px;
     height: 30px;
     line-height: 30px;
   }
