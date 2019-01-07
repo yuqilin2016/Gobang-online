@@ -14,9 +14,7 @@ server.listen(port, () => {
 });
 
 app.use(express.static(path.join(__dirname, 'public')))
-app.get('/', (req, res) => {
-	console.log(req)
-})
+
 let connectRoom = {}
 
 const changeAuth = (currentRoom, currentUser) => {
@@ -28,60 +26,6 @@ const changeAuth = (currentRoom, currentUser) => {
 		}
 	}
 }
-
-//检查各个方向是否符合获胜条件
-// function checkDirection (i,j,p,q,me) {
-// 	//p=0,q=1 水平方向；p=1,q=0 竖直方向
-// 	//p=1,q=-1 左下到右上
-// 	//p=-1,q=1 左到右上
-// 	let m = 1
-// 	let n = 1
-// 	let isBlack = me ? 1 : 2
-
-// 	for (; m < 5; m++) {
-// 		// console.log(`m:${m}`)
-// 		if (!(i+m*p >= 0 && i+m*p <=14 && j+m*q >=0 && j+m*q <=14)) {
-// 			break;
-// 		} else {
-// 			if (chessBoard[i+m*(p)][j+m*(q)] !== isBlack) {
-// 			 break;
-// 			}
-// 		}
-// 	}
-// 	for (; n < 5; n++) {
-// 		// console.log(`n:${n}`)
-// 		if(!(i-n*p >=0 && i-n*p <=14 && j-n*q >=0 && j-n*q <=14)) {
-// 			break;
-// 		} else {
-// 			if (chessBoard[i-n*(p)][j-n*(q)] !== isBlack) {
-// 			 break;
-// 			}
-// 		}
-// 	}
-// 	if (n+m+1 >= 7) {
-// 		return true
-// 		// let msg = (isBlack===1) ? '黑方胜利!' : '白方胜利!';
-// 		// alert(msg);
-// 		// winner.innerHTML = msg;
-// 		// cancelOne.disabled = true;
-// 		// for (let i = 0; i < 15; i++) {
-// 		// 	for (let j = 0; j < 15; j++) {
-// 		// 		chessBoard[i][j] = 3
-// 		// 	}
-// 		// }
-// 		// console.table(chessBoard)
-// 	}
-// }
-
-// //检查是否获胜
-// function checkWin (i,j,isBlack) {
-// 	// console.table(chessBoard)
-// 	if (checkDirection(i,j,1,0) || checkDirection(i,j,0,1) ||
-// 		 checkDirection(i,j,1,-1) || checkDirection(i,j,1,1)) {
-// 		return true
-// 	}
-// 	return false
-// }
 
 io.on('connection', (socket) => {
 	console.log('connected')
@@ -95,7 +39,7 @@ io.on('connection', (socket) => {
 			connectRoom[data.roomNo].full = false
 			console.log(connectRoom)
 			socket.emit('userInfo', {
-				canDown: connectRoom[data.roomNo][data.userName].canDown,
+				canDown: false
 				// roomInfo:connectRoom[data.roomNo]
 			})
 			socket.emit('roomInfo', {
@@ -114,7 +58,7 @@ io.on('connection', (socket) => {
 			connectRoom[data.roomNo].full = true
 			console.log(connectRoom)
 			socket.emit('userInfo', {
-				canDown: connectRoom[data.roomNo][data.userName].canDown,
+				canDown: true
 				// roomInfo:connectRoom[data.roomNo]
 			})
 			socket.emit('roomInfo', {
@@ -169,5 +113,36 @@ io.on('connection', (socket) => {
 			userName: data.userName,
 			roomNo: data.roomNo
 		})
+	})
+
+	socket.on('userDisconnect', ({userName, roomNo}) => {
+		if (connectRoom[roomNo] && connectRoom[roomNo][userName]) {
+			socket.broadcast.emit('userEscape', {userName, roomNo})
+			delete connectRoom[roomNo][userName]
+			connectRoom[roomNo].full = false
+			let keys = Object.getOwnPropertyNames(connectRoom[roomNo]).length
+			// console.log(keys)
+			if (keys <= 1) {
+				delete connectRoom[roomNo]
+			} else {
+				for (let user in connectRoom[roomNo]) {
+					if (user !== 'full') {
+						connectRoom[roomNo][user].canDown = false
+						socket.emit('userInfo', {
+							canDown: false
+						})
+						socket.emit('roomInfo', {
+							roomNo,
+							roomInfo: connectRoom[roomNo]
+						})
+						socket.broadcast.emit('roomInfo', {
+							roomNo,
+							roomInfo: connectRoom[roomNo]
+						})
+					}
+				}
+			}
+			console.log(connectRoom)
+		}
 	})
 })

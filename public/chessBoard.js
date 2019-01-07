@@ -1,150 +1,167 @@
 
-	let chess = document.getElementById("chess");
-	let layer = document.getElementById("layer");
-	let context = chess.getContext("2d");
-	let context2 = layer.getContext("2d");
-	// let first = document.querySelectorAll('.first')
-	// let currentPlayer = document.querySelector('#currentPlayer')
-	let winner = document.querySelector('#winner')
-	let cancelOne = document.querySelector('#cancelOne')
-	let colorSelect = document.querySelector('#colorSelect')
-	let user = document.querySelector('#user')
-	let room = document.querySelector('#room')
-	let enter = document.querySelector('#enter')
- 	let userInfo = document.querySelector('.userInfo')
- 	let waitingUser = document.querySelector('.waitingUser')
+let chess = document.getElementById("chess");
+let layer = document.getElementById("layer");
+let context = chess.getContext("2d");
+let context2 = layer.getContext("2d");
+// let first = document.querySelectorAll('.first')
+// let currentPlayer = document.querySelector('#currentPlayer')
+let winner = document.querySelector('#winner')
+let cancelOne = document.querySelector('#cancelOne')
+let colorSelect = document.querySelector('#colorSelect')
+let user = document.querySelector('#user')
+let room = document.querySelector('#room')
+let enter = document.querySelector('#enter')
+let userInfo = document.querySelector('.userInfo')
+let waitingUser = document.querySelector('.waitingUser')
+// let restart = document.querySelector('#restart')
 
-	let socket = io.connect('http://localhost:3000')
+let socket = io.connect('http://localhost:3000')
 
-	let userList = []
+let userList = []
 
-	enter.addEventListener('click', (event) => {
-		if( !user.value || !room.value ){
-        alert('请输入用户名或者房间号...')
-        return;
-    }
-    let ajax = new XMLHttpRequest()
-    ajax.open('get', 'http://localhost:3000?room=' + room.value + '&user=' + user.value)
-    ajax.send()
-    ajax.onreadystatechange = function () {
-    	if (ajax.readyState === 4 && ajax.status === 200) {
-
-    		//用户请求进入房间
-    		socket.emit('enter', {
+enter.addEventListener('click', (event) => {
+	if( !user.value || !room.value ){
+      alert('请输入用户名或者房间号...')
+      return;
+  }
+  let ajax = new XMLHttpRequest()
+  ajax.open('get', 'http://localhost:3000?room=' + room.value + '&user=' + user.value)
+  ajax.send()
+  ajax.onreadystatechange = function () {
+  	if (ajax.readyState === 4 && ajax.status === 200) {
+  		
+  		//用户请求进入房间
+  		socket.emit('enter', {
 				userName: user.value,
 				roomNo: room.value
-				})
-				//canDown:true用户执黑棋, canDown:false用户执白棋
-				socket.on('userInfo', (data) => {
-					obj.me = data.canDown
-				})
-				//显示房间用户信息
-				socket.on('roomInfo', (data) => {
-					if (data.roomNo === room.value) {
-						userInfo.innerHTML = ''
-						for (let user in data.roomInfo) {
-							if (user !== 'full') {
-								userList.push(user)
-								let div = document.createElement('div')
-								let userName = document.createTextNode(user)
-								// let userClass = document.createAttribute('class')
-								div.appendChild(userName)
-								// div.appendChild(userClass)
-								div.setAttribute('class', 'userItem')
-								userInfo.appendChild(div)
-								// console.log(user)
-								if (data.roomInfo[user].canDown) {
-									div.style.backgroundColor = 'black'
-									div.style.color = 'white'
-									
-									waitingUser.innerHTML = `等待${user}落子...`
-								} else {
-									div.style.backgroundColor = 'white'
-									waitingUser.innerHTML = `等待其他用户加入...`
-								}
+			})
+			//canDown:true用户执黑棋, canDown:false用户执白棋
+			socket.on('userInfo', (data) => {
+				obj.me = data.canDown
+			})
+			//显示房间用户信息
+			socket.on('roomInfo', (data) => {
+				if (data.roomNo === room.value) {
+					userInfo.innerHTML = ''
+					for (let user in data.roomInfo) {
+						if (user !== 'full') {
+							userList.push(user)
+							let div = document.createElement('div')
+							let userName = document.createTextNode(user)
+							// let userClass = document.createAttribute('class')
+							div.appendChild(userName)
+							// div.appendChild(userClass)
+							div.setAttribute('class', 'userItem')
+							userInfo.appendChild(div)
+							// console.log(user)
+							if (data.roomInfo[user].canDown) {
+								div.style.backgroundColor = 'black'
+								div.style.color = 'white'
+								
+								waitingUser.innerHTML = `等待${user}落子...`
+							} else {
+								div.style.backgroundColor = 'white'
+								waitingUser.innerHTML = `等待其他用户加入...`
 							}
 						}
-						userInfo.style.backgroundColor = 'gray'
-						waitingUser.style.color = 'white'
-						waitingUser.style.backgroundColor = 'gray'
 					}
-				})
-				//下棋
-				layer.onclick = function (e) {
-			    let x = e.offsetX ;
-			    let y = e.offsetY ;
-			    let j = Math.floor(x/30) ;
-			    let i = Math.floor(y/30) ;
-			    if (chessBoard[i][j] === 0) {
-			      // oneStep(i,j,obj.me,false);
-			      socket.emit('move', {
-			      	i:i,
-			      	j:j,
-			      	isBlack: obj.me,
-			      	userName: user.value,
-			      	roomNo: room.value
-			      })
-			      // cancel_i = i;
-			      // cancel_j = j;
-			    }
+					userInfo.style.backgroundColor = 'PowderBlue'
+					// waitingUser.style.color = 'white'
+					waitingUser.style.backgroundColor = 'PowderBlue'
 				}
-				//显示棋子
-				socket.on('moveInfo', (data) => {
-					console.log(data)
-					if (data.roomNo === room.value) {
-						let {i, j, isBlack} = data
-						oneStep(i, j, isBlack,false)
-						if (data.isBlack) {
-						  chessBoard[i][j] = 1;
-						} else {
-						  chessBoard[i][j] = 2;
-						}
-						if (checkWin(i,j,obj.me)) {
-			      	socket.emit('userWin', {
-			      		userName: data.userName,
-			      		roomNo: data.roomNo
-			      	})
-			      }
-			      userList.forEach((item, index, array) => {
-			      	if (item !== data.userName) {
-			      		waitingUser.innerHTML = `等待${item}落子...`
-			      	}
-			      })
+			})
+			//下棋
+			layer.onclick = function (e) {
+		    let x = e.offsetX ;
+		    let y = e.offsetY ;
+		    let j = Math.floor(x/30) ;
+		    let i = Math.floor(y/30) ;
+		    if (chessBoard[i][j] === 0) {
+		      // oneStep(i,j,obj.me,false);
+		      socket.emit('move', {
+		      	i:i,
+		      	j:j,
+		      	isBlack: obj.me,
+		      	userName: user.value,
+		      	roomNo: room.value
+		      })
+		      // cancel_i = i;
+		      // cancel_j = j;
+		    }
+			}
+			//显示棋子
+			socket.on('moveInfo', (data) => {
+				// console.log(data)
+				if (data.roomNo === room.value) {
+					// restart.setAttribute('disabled', true)
+					let {i, j, isBlack} = data
+					oneStep(i, j, isBlack,false)
+					if (data.isBlack) {
+					  chessBoard[i][j] = 1;
+					} else {
+					  chessBoard[i][j] = 2;
 					}
-				})
-				//提示胜利者，禁止再下棋
-				socket.on('userWinInfo', (data) => {
-					if (data.roomNo === room.value) {
-						alert(`${data.userName}胜利！`)
-						waitingUser.innerHTML = `${data.userName}胜利！`
-						waitingUser.style.color = 'red'
-						for (let i = 0; i < 15; i++) {
-							for (let j = 0; j < 15; j++) {
-								chessBoard[i][j] = 3
-							}
+					if (checkWin(i,j,obj.me)) {
+		      	socket.emit('userWin', {
+		      		userName: data.userName,
+		      		roomNo: data.roomNo
+		      	})
+		      }
+		      userList.forEach((item, index, array) => {
+		      	if (item !== data.userName) {
+		      		waitingUser.innerHTML = `等待${item}落子...`
+		      	}
+		      })
+				}
+			})
+			//提示胜利者，禁止再下棋
+			socket.on('userWinInfo', (data) => {
+				if (data.roomNo === room.value) {
+					alert(`${data.userName}胜利！`)
+					waitingUser.innerHTML = `${data.userName}胜利！`
+					waitingUser.style.color = 'red'
+					for (let i = 0; i < 15; i++) {
+						for (let j = 0; j < 15; j++) {
+							chessBoard[i][j] = 3
 						}
 					}
-				})
-				//提示用户房间已满
-				socket.on('roomFull', (data) => {
-					alert(`房间${data}已满，请更换房间！`)
-					room.value = ''
-				})
-				//提示用户重名
-				socket.on('userExisted', (data) => {
-					alert(`用户${data}已存在，请更换用户名！`)
-				})
-    	}
-    }
-		// if (user.value && room.value) {
-		// 	socket.emit('enter', {
-		// 		userName: user.value,
-		// 		roomNo: room.value
-		// 	})
-		// }
-	})
+					reStart()
+					waitingUser.style.color = 'black'
+				}
+			})
+			//提示用户房间已满
+			socket.on('roomFull', (data) => {
+				alert(`房间${data}已满，请更换房间！`)
+				room.value = ''
+			})
+			//提示用户重名
+			socket.on('userExisted', (data) => {
+				alert(`用户${data}已存在，请更换用户名！`)
+			})
 
-	
+			socket.on('userEscape', ({userName, roomNo}) => {
+				if (roomNo === room.value) {
+					alert(`${userName}逃跑了，请等待其他用户加入！`)
+					reStart()
+				}
+			})
+  	}
+  }
+	// if (user.value && room.value) {
+	// 	socket.emit('enter', {
+	// 		userName: user.value,
+	// 		roomNo: room.value
+	// 	})
+	// }
+})
+
+function checkLeave(){
+	socket.emit('userDisconnect', {
+		userName: user.value,
+		roomNo: room.value
+	})
+}
+
 	//改变棋盘颜色
 	colorSelect.addEventListener('change', (event) => {
 		// console.log(event.target.value)
@@ -321,8 +338,8 @@
 	//重新开始
 	function reStart () {
 	  context2.clearRect(0, 0, 450, 450)
-	  waitingUser.innerHTML = '请上局失利者先落子'
-	  waitingUser.style.color = 'white'
+	  waitingUser.innerHTML = '请上局失利者先落子！'
+	  // waitingUser.style.color = 'white'
 		for (let i = 0; i < 15; i++) {
 		  chessBoard[i] = [];
 		  for (let j = 0; j < 15; j++) {

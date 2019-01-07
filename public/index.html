@@ -8,7 +8,7 @@
   <link rel="shortcut icon" href="favicon.ico" /> 
   <link rel="bookmark" href="favicon.ico" type="image/x-icon" />
 </head>
-<body>
+<body onbeforeunload="checkLeave()">
 
 <h1>五子棋</h1>
 
@@ -32,7 +32,9 @@
 </div>
 
 <form id="action">
-  <button type="button" value='重新开始' onclick='reStart()'>重新开始</button>
+  <!-- <button id="restart" value='重新开始' onclick='reStart()'>
+  重新开始
+  </button> -->
   <!-- <button type="button" class="first" value='黑棋优先' onclick='blackFirst()'>黑棋优先</button>
   <button type="button" class="first" value='白棋优先' onclick='whiteFirst()'>白棋优先</button> -->
   <!-- <button type="button" id="cancelOne" onclick='cancel()'>撤销一步</button> -->
