@@ -84,7 +84,7 @@ div.userItem {
 @media screen and (max-width: 430px) {
   canvas {
     transform: scale(0.91);
-    transform-origin: 0 60%;
+    transform-origin: 0 70%;
   }
 
   div#current {
