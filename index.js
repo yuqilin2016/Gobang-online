@@ -3,7 +3,7 @@ let http = require('http')
 let app = express()
 let path = require('path')
 let server = http.createServer(app)
-let io = require('socket.io')(server);
+let io = require('socket.io').listen(server)
 
 let port = process.env.PORT || 3000
 // app.get('/', (req, res) => {
