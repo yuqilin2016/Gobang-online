@@ -25,7 +25,7 @@ enter.addEventListener('click', (event) => {
       return;
   }
   let ajax = new XMLHttpRequest()
-  ajax.open('get', 'http://localhost:3000?room=' + room.value + '&user=' + user.value)
+  ajax.open('get', 'https://gobang-online.herokuapp.com?room=' + room.value + '&user=' + user.value)
   ajax.send()
   ajax.onreadystatechange = function () {
   	if (ajax.readyState === 4 && ajax.status === 200) {
