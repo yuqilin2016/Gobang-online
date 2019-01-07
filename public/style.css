@@ -54,6 +54,15 @@ form#info {
 form#info input {
   width: 173px;
 }
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+ 
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+
 button#enter {
   float: right;
   margin-top: -40px;
@@ -84,7 +93,7 @@ div.userItem {
 @media screen and (max-width: 430px) {
   canvas {
     transform: scale(0.91);
-    transform-origin: 0 70%;
+    transform-origin: 0 80%;
   }
 
   div#current {
