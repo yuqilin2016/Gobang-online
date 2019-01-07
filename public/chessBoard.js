@@ -15,7 +15,7 @@ let userInfo = document.querySelector('.userInfo')
 let waitingUser = document.querySelector('.waitingUser')
 // let restart = document.querySelector('#restart')
 
-let socket = io.connect('http://localhost:3000')
+let socket = io.connect('https://gobang-online.herokuapp.com')
 
 let userList = []
 
