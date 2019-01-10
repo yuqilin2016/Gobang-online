@@ -4,7 +4,8 @@
 	<meta charset="UTF-8">
 	<title>五子棋online</title>
 	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-	<link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" media="screen and (min-width:900px)" href="style.css">
+	<link rel="stylesheet" media="screen and (max-width:500px)" href="mobile_style.css">
   <link rel="shortcut icon" href="favicon.ico" /> 
   <link rel="bookmark" href="favicon.ico" type="image/x-icon" />
 </head>
@@ -12,23 +13,28 @@
 
 <h1>五子棋</h1>
 
-<div>
- <canvas id="chess" width="450px" height="450px"></canvas>
-  <canvas id="layer" width="450px" height="450px"></canvas>
-</div>
-
 <div id="current">
 	<!-- <div id="currentPlayer"></div> -->
-	<div id="winner"></div>
-  <form id="info">
-    <label for="user">用户名：</label>
-    <input type="text" name="user" id="user">
-    <label for="room">房间号：</label>
-    <input type="number" name="text" id="room">
-  </form>
+	<!-- <div id="winner"></div> -->
+  <div class="infoWrapper">
+    <div class="info">
+      <label for="user">用户名：</label>
+      <input type="text" name="user" id="user">
+    </div>
+    <div class="info">
+      <label for="room">房间号：</label>
+      <input type="number" name="text" id="room">
+    </div>
+  </div>
   <button id="enter">进入</button>
+</div>
+<div class="userWrapper">
   <div class="userInfo"></div>
   <div class="waitingUser"></div>
+</div>
+<div class="chessBoard">
+ <canvas id="chess" width="450px" height="450px"></canvas>
+  <canvas id="layer" width="450px" height="450px"></canvas>
 </div>
 
 <form id="action">

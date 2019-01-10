@@ -47,18 +47,18 @@ div#current {
 	/*margin-top: 5%;*/
 	/*margin-right: 20%;*/
 }
-form#info {
+div.info {
   /*position: absolute;*/
   width: 250px;
 }
-form#info input {
+div.info input {
   width: 173px;
 }
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
     -webkit-appearance: none;
 }
- 
+
 input[type="number"] {
     -moz-appearance: textfield;
 }
@@ -70,7 +70,8 @@ button#enter {
 div.userInfo {
   display: flex;
   justify-content: center;
-  margin-top: 10px;
+  margin-top: 90px;
+  width: 250px;
 }
 div.userItem {
   min-width: 60px;
@@ -84,71 +85,10 @@ div.userItem {
   line-height: 60px;
 }
 .waitingUser {
-  width: 100%;
+  width: 250px;
   text-align: center;
   padding-bottom: 2px;
   /*height: 100px;*/
   /*line-height: 100px;*/
 }
-@media screen and (max-width: 430px) {
-  canvas {
-    transform: scale(0.91);
-    transform-origin: 0 80%;
-  }
 
-  div#current {
-    margin-left: -5px;
-  }
-  div.userItem {
-    min-width: 40px;
-    height: 40px;
-    line-height: 40px;
-  }
-  h1 {
-    float: right;
-    /*position: absolute;*/
-    margin-right: 5px;
-    width: 100px;
-    margin-top: 20px;
-    /*text-align: left;*/
-    /*clear: both;*/
-  }
-}
-@media screen and (max-width: 376px) {
-  canvas {
-    transform: scale(0.833);
-    /*transform-origin: 0;*/
-  }
-  h1 {
-    font-size: 150%;
-    margin-right: -5px;
-  }
-  form#info {
-    width: 230px;
-  }
-  form#info input {
-    width: 150px;
-  }
-  div#current {
-    width: 75%;
-  }
-}
-@media screen and (max-width: 361px) {
-  canvas {
-    transform: scale(0.8);
-    /*transform-origin: 0;*/
-  }
-}
-/*@media screen and (max-width: 470px) {
-  form#info {
-    width: 270px;
-  }
-  div#current {
-    width: 320px;
-  }
-}
-@media screen and (max-width: 380px) {
-  body {
-    transform: scale(0.8);
-  }
-}*/
